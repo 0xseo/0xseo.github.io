@@ -340,7 +340,7 @@ function render() {
   }
 
   for (let pt of intersections) {
-    shader.setVec4("u_color", [0.0, 1.0, 1.0, 1.0]);
+    shader.setVec4("u_color", [1.0, 1.0, 0.0, 1.0]);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array([pt.x, pt.y]),
