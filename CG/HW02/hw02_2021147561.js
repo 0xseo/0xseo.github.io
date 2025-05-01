@@ -12,9 +12,6 @@ const canvas = document.getElementById("glCanvas");
 const gl = canvas.getContext("webgl2");
 let shader;
 let vao;
-let colorTag = "red";
-let verticalFlip = 1.0; // 1.0 for normal, -1.0 for vertical flip
-let textOverlay3; // for text output third line (see util.js)
 let x = 0.0;
 let y = 0.0;
 
