@@ -106,7 +106,7 @@ function setupKeyboardEvents() {
         textOverlay3,
         "shading mode: " +
           shadingMode +
-          (shadingMethod == 1 ? " (PHONG)" : " (Gouraud)")
+          (shadingMethod == 1 ? " (PHONG)" : " (GOURAUD)")
       );
       render();
     } else if (event.key == "p") {
@@ -116,7 +116,7 @@ function setupKeyboardEvents() {
         textOverlay3,
         "shading mode: " +
           shadingMode +
-          (shadingMethod == 1 ? " (PHONG)" : " (Gouraud)")
+          (shadingMethod == 1 ? " (PHONG)" : " (GOURAUD)")
       );
       render();
     }
