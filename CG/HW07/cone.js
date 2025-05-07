@@ -1,9 +1,9 @@
-export class Cylinder {
+export class Cone {
   /**
    * @param {WebGLRenderingContext} gl         - WebGL 렌더링 컨텍스트
    * @param {number} segments                 - 옆면 세그먼트 수 (원 둘레를 몇 등분할지)
    * @param {object} options
-   *        options.color : [r, g, b, a] 형태의 색상 (기본 [0.8, 0.8, 0.8, 1.0])
+   *        options.coloxwr : [r, g, b, a] 형태의 색상 (기본 [0.8, 0.8, 0.8, 1.0])
    */
   constructor(gl, segments = 32, options = {}) {
     this.gl = gl;
@@ -64,10 +64,6 @@ export class Cylinder {
         0,
         halfH,
         0,
-        // top1
-        0,
-        halfH,
-        0,
         // bot1
         x1_bot,
         -halfH,
@@ -82,22 +78,20 @@ export class Cylinder {
       // face의 중앙 각도(midAngle) 기준으로 바깥쪽을 가리키는 (cos, 0, sin)
       const midAngle = angle0 + angleStep * 0.5;
       const nx = Math.cos(midAngle);
-      const ny = 0.0;
+      const ny = 0.5;
       const nz = Math.sin(midAngle);
 
-      // 이 사각형의 4개 정점에 동일한 법선 지정
-      for (let k = 0; k < 4; k++) {
+      const n = vec3.create();
+      vec3.normalize(n, [nx, ny, nz]);
+
+      // 이 삼각형의 3개 정점에 동일한 법선 지정
+      for (let k = 0; k < 3; k++) {
         normals.push(nx, ny, nz);
       }
 
       // 색상도 마찬가지로 4정점 동일
-      for (let k = 0; k < 4; k++) {
-        colors.push(
-          colorOption[0],
-          colorOption[1],
-          colorOption[2],
-          colorOption[3]
-        );
+      for (let k = 0; k < 3; k++) {
+        colors.push(colorOption[0], colorOption[1], colorOption[2]);
       }
 
       // 텍스처 좌표 (단순 cylindrical mapping)
@@ -107,9 +101,6 @@ export class Cylinder {
       texCoords.push(
         // top0
         u0,
-        1,
-        // top1
-        u1,
         1,
         // bot1
         u1,
@@ -121,8 +112,8 @@ export class Cylinder {
 
       // 인덱스 (두 삼각형)
       // 이번 face가 i번째면, 정점 baseIndex = i*4
-      const base = i * 4;
-      indices.push(base, base + 1, base + 2, base + 2, base + 3, base);
+      const base = i * 3;
+      indices.push(base, base + 1, base + 2);
     }
 
     // Float32Array/Uint16Array에 담기

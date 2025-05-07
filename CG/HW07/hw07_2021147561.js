@@ -14,7 +14,7 @@ import { resizeAspectRatio, setupText, updateText } from "../util/util.js";
 import { Shader, readShaderFile } from "../util/shader.js";
 import { Cube } from "../util/cube.js";
 import { Arcball } from "../util/arcball.js";
-import { Cylinder } from "./cone.js";
+import { Cone } from "./cone.js";
 
 const canvas = document.getElementById("glCanvas");
 const gl = canvas.getContext("webgl2");
@@ -33,7 +33,7 @@ let lampModelMatrix = mat4.create();
 let arcBallMode = "CAMERA"; // 'CAMERA' or 'MODEL'
 let shadingMode = "FLAT"; // 'FLAT' or 'SMOOTH'
 
-const cylinder = new Cylinder(gl, 32);
+const cone = new Cone(gl, 32);
 const lamp = new Cube(gl);
 
 const cameraPos = vec3.fromValues(0, 0, 3);
@@ -78,8 +78,8 @@ function setupKeyboardEvents() {
       arcBallMode = "CAMERA";
       updateText(textOverlay2, "arcball mode: " + arcBallMode);
     } else if (event.key == "s") {
-      cylinder.copyVertexNormalsToNormals();
-      cylinder.updateNormals();
+      cone.copyVertexNormalsToNormals();
+      cone.updateNormals();
       shadingMode = "SMOOTH";
       updateText(
         textOverlay3,
@@ -89,8 +89,8 @@ function setupKeyboardEvents() {
       );
       render();
     } else if (event.key == "f") {
-      cylinder.copyFaceNormalsToNormals();
-      cylinder.updateNormals();
+      cone.copyFaceNormalsToNormals();
+      cone.updateNormals();
       shadingMode = "FLAT";
       updateText(
         textOverlay3,
@@ -100,7 +100,7 @@ function setupKeyboardEvents() {
       );
       render();
     } else if (event.key == "g") {
-      cylinder.updateNormals();
+      cone.updateNormals();
       shadingMethod = 0;
       updateText(
         textOverlay3,
@@ -110,7 +110,7 @@ function setupKeyboardEvents() {
       );
       render();
     } else if (event.key == "p") {
-      cylinder.updateNormals();
+      cone.updateNormals();
       shadingMethod = 1;
       updateText(
         textOverlay3,
@@ -169,7 +169,7 @@ function render() {
   shader.setMat4("u_view", viewMatrix);
   shader.setVec3("u_viewPos", cameraPos);
   shader.setFloat("u_shadingMethod", shadingMethod);
-  cylinder.draw(shader);
+  cone.draw(shader);
 
   // drawing the lamp
   lampShader.use();
