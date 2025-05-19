@@ -1,11 +1,7 @@
 import * as THREE from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import {
-  initStats,
-  initRenderer,
-  initCamera,
-  initOrbitControls,
-} from "./util.js";
+import { initStats, initRenderer, initCamera } from "./util.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
 const textureLoader = new THREE.TextureLoader();
@@ -13,7 +9,8 @@ const textureLoader = new THREE.TextureLoader();
 const renderer = initRenderer();
 let camera = initCamera();
 const stats = initStats();
-let orbitControls = initOrbitControls(camera, renderer);
+const controls = setupControls();
+controls.orbitControls = new OrbitControls(camera, renderer.domElement);
 
 const sun = new THREE.Mesh(
   new THREE.SphereGeometry(10),
@@ -87,12 +84,12 @@ let earthRotationStep = 0;
 let marsOrbitStep = 0;
 let marsRotationStep = 0;
 
-const controls = setupControls();
+// const controls = setupControls();
 render();
 
 function render() {
   stats.update();
-  orbitControls.update();
+  controls.orbitControls.update();
 
   mercuryRotationStep -= controls.mercuryRotationSpeed;
   mercuryOrbitStep -= controls.mercuryOrbitSpeed;
@@ -137,13 +134,13 @@ function setupControls() {
     this.earthOrbitSpeed = 0.01;
     this.marsRotationSpeed = 0.008;
     this.marsOrbitSpeed = 0.008;
+    this.orbitControls = null;
 
     // 여기 추가
     this.perspective = "Perspective"; // 현재 카메라 타입 표시용
     this.switchCamera = () => {
       // 기존 카메라와 컨트롤 제거
-      scene.remove(camera);
-      orbitControls.dispose();
+      controls.orbitControls.dispose();
 
       if (camera instanceof THREE.PerspectiveCamera) {
         camera = new THREE.OrthographicCamera(
@@ -169,8 +166,8 @@ function setupControls() {
       camera.position.set(120, 60, 180);
       camera.lookAt(scene.position);
 
-      orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-      orbitControls.enableDamping = true;
+      controls.orbitControls = new OrbitControls(camera, renderer.domElement);
+      controls.orbitControls.enableDamping = true;
     };
   })();
 
